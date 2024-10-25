@@ -3,7 +3,6 @@ import pandas as pd
 import streamlit as st
 import joblib
 
-# Använd en standardport
 PORT = os.environ.get('PORT', 8501)
 
 # Ladda modellen
