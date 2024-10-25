@@ -1,6 +1,8 @@
+import os 
 import pandas as pd
 import streamlit as st
 import joblib
+PORT = os.environ.get('PORT', 8501)
 
 # Ladda modellen som redan har tränats
 model = joblib.load('titanic_model.pkl')
