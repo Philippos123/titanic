@@ -2,28 +2,27 @@ import os
 import pandas as pd
 import streamlit as st
 import joblib
+
+# Använd en standardport
 PORT = os.environ.get('PORT', 8501)
 
-# Ladda modellen som redan har tränats
+# Ladda modellen
 model = joblib.load('titanic_model.pkl')
 
-# Definiera funktionen för att förutsäga överlevnad
+# Förutsäga överlevnad
 def predict_survival(age, gender, fare, parch, pclass, sibsp):
-    # Ordna kolumnerna exakt som under träningen
     input_data = pd.DataFrame({
-        'Pclass': [pclass],    # Första kolumnen
-        'Sex': [1 if gender == 'female' else 0],  # 1 för man, 0 för kvinna
+        'Pclass': [pclass],    
+        'Sex': [1 if gender == 'female' else 0],  
         'Age': [age],
         'SibSp': [sibsp],
         'Parch': [parch],
         'Fare': [fare]
     })
-
-    # Förutsäga sannolikheten att överleva
-    survival_probability = model.predict_proba(input_data)[:, 1]  # Endast sannolikhet för överlevnad
+    survival_probability = model.predict_proba(input_data)[:, 1]  
     return survival_probability[0]
 
-# Streamlit-appen
+# Streamlit app
 st.title("Titanic Survival Predictor")
 
 # Användarinmatning
@@ -34,7 +33,7 @@ parch = st.number_input("Ange antal familjemedlemmar som reser med (Parch):", mi
 pclass = st.selectbox("Välj klass (Pclass):", (1, 2, 3))
 sibsp = st.number_input("Ange antal syskon/spouse (SibSp):", min_value=0)
 
-# Förutsäg överlevnadschans när knappen trycks
+# Förutsäg när knappen trycks
 if st.button("Förutsäg överlevnad"):
     chance_of_survival = predict_survival(age, gender, fare, parch, pclass, sibsp)
     st.write(f"Din chans att överleva är {chance_of_survival * 100:.2f}%")
